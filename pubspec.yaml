@@ -1,0 +1,54 @@
+name: portfolio
+description: "Osama Soliman — Flutter Developer Portfolio"
+publish_to: 'none'
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.10.7
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # Animations
+  flutter_animate: ^4.5.2
+
+  # URL launcher
+  url_launcher: ^6.3.1
+
+  # Visibility detector for scroll animations
+  visibility_detector: ^0.4.0+2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/
+
+  fonts:
+    - family: SpaceGrotesk
+      fonts:
+        - asset: assets/fonts/SpaceGrotesk-w600.ttf
+          weight: 600
+        - asset: assets/fonts/SpaceGrotesk-w700.ttf
+          weight: 700
+
+    - family: Inter
+      fonts:
+        - asset: assets/fonts/Inter-w400.ttf
+          weight: 400
+        - asset: assets/fonts/Inter-w500.ttf
+          weight: 500
+
+    - family: JetBrainsMono
+      fonts:
+        - asset: assets/fonts/JetBrainsMono-Regular.ttf
+          weight: 400

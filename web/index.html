@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Osama Soliman — Flutter Developer based in Auckland, NZ. Building beautiful, performant apps for iOS, Android & Web.">
+  <meta name="keywords" content="Flutter Developer, Mobile Developer, Dart, Riverpod, Firebase, Auckland, New Zealand">
+  <meta name="author" content="Osama Soliman">
+
+  <link rel="canonical" href="https://osamasolimannz.web.app/">
+
+  <!-- Open Graph -->
+  <meta property="og:title" content="Osama Soliman — Flutter Developer">
+  <meta property="og:description" content="I build beautiful, performant apps for iOS, Android & Web — with Flutter at the core.">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://osamasolimannz.web.app/">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Osama Soliman — Flutter Developer">
+  <meta name="twitter:description" content="Flutter Developer based in Auckland, NZ.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Osama Soliman">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <!-- Theme color -->
+  <meta name="theme-color" content="#07080E">
+
+  <title>Osama Soliman — Flutter Developer</title>
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Structured data -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    "name": "Osama Soliman",
+    "jobTitle": "Flutter Developer",
+    "url": "https://osamasolimannz.web.app",
+    "address": { "@type": "PostalAddress", "addressLocality": "Auckland", "addressCountry": "NZ" },
+    "sameAs": [
+      "https://www.linkedin.com/in/osama-soliman-00980b320/",
+      "https://github.com/osamawaseem1"
+    ]
+  }
+  </script>
+
+  <!-- Preload critical resources so the browser fetches them immediately -->
+  <link rel="preload" href="flutter_bootstrap.js" as="script">
+  <link rel="preload" href="main.dart.js" as="script">
+
+  <!-- Loading screen — shown instantly while Flutter boots -->
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { background: #07080E; }
+    #fl-load {
+      position: fixed;
+      inset: 0;
+      background: #07080E;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 20px;
+      z-index: 9999;
+      transition: opacity 0.4s ease;
+    }
+    #fl-load .monogram {
+      color: #ECEAF8;
+      font-family: system-ui, sans-serif;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 4px;
+      opacity: 0.9;
+    }
+    #fl-load .track {
+      width: 100px;
+      height: 2px;
+      background: #17182C;
+      border-radius: 2px;
+      overflow: hidden;
+    }
+    #fl-load .fill {
+      height: 100%;
+      border-radius: 2px;
+      background: linear-gradient(90deg, #7B74CC, #00C8DC);
+      animation: sweep 1.4s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    @keyframes sweep {
+      0%   { transform: translateX(-100%) scaleX(0.4); }
+      50%  { transform: translateX(60%)   scaleX(0.7); }
+      100% { transform: translateX(200%)  scaleX(0.4); }
+    }
+  </style>
+</head>
+<body>
+  <div id="fl-load">
+    <div class="monogram">OS</div>
+    <div class="track"><div class="fill"></div></div>
+  </div>
+
+  <script>
+    // Fade out the loading screen on Flutter's first rendered frame
+    window.addEventListener('flutter-first-frame', function () {
+      var el = document.getElementById('fl-load');
+      if (el) {
+        el.style.opacity = '0';
+        setTimeout(function () { el.remove(); }, 420);
+      }
+    });
+  </script>
+
+  <script>
+    // Unregister any existing service worker so returning visitors get fresh content
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.getRegistrations().then(function(registrations) {
+        for (var r of registrations) { r.unregister(); }
+      });
+    }
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

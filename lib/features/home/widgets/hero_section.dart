@@ -415,6 +415,32 @@ class _CodeWindowsMockupState extends State<_CodeWindowsMockup>
       _cl([_ts('}', _def)]),
     ];
 
+    final profileLines = [
+      _cl([_ts('// About the developer', _cmt)]),
+      _blank(),
+      _cl([_ts('class ', _kw), _ts('OsamaSoliman ', _cls), _ts('{', _def)]),
+      _cl([_ts('  final ', _kw), _ts('name ', _def), _ts('= ', _def), _ts("'Osama Soliman'", _str), _ts(';', _def)]),
+      _cl([_ts('  final ', _kw), _ts('role ', _def), _ts('= ', _def), _ts("'Flutter Developer'", _str), _ts(';', _def)]),
+      _cl([_ts('  final ', _kw), _ts('location ', _def), _ts('= ', _def), _ts("'Auckland, NZ'", _str), _ts(';', _def)]),
+      _blank(),
+      _cl([_ts('  final ', _kw), _ts('skills ', _def), _ts('= [', _def)]),
+      _cl([_ts("    'Flutter'", _str), _ts(', ', _def), _ts("'Firebase'", _str), _ts(',', _def)]),
+      _cl([_ts("    'Riverpod'", _str), _ts(', ', _def), _ts("'Go Router'", _str), _ts(',', _def)]),
+      _cl([_ts('  ];', _def)]),
+      _cl([_ts('}', _def)]),
+    ];
+
+    final skillsLines = [
+      _cl([_ts('// Stack overview', _cmt)]),
+      _blank(),
+      _cl([_ts('const ', _kw), _ts('stack ', _def), _ts('= {', _def)]),
+      _cl([_ts("  'lang'", _str), _ts(': ', _def), _ts("'Dart'", _str), _ts(',', _def)]),
+      _cl([_ts("  'ui'", _str), _ts(': ', _def), _ts("'Flutter'", _str), _ts(',', _def)]),
+      _cl([_ts("  'state'", _str), _ts(': ', _def), _ts("'Riverpod'", _str), _ts(',', _def)]),
+      _cl([_ts("  'backend'", _str), _ts(': ', _def), _ts("'Firebase'", _str), _ts(',', _def)]),
+      _cl([_ts('};', _def)]),
+    ];
+
     return AnimatedBuilder(
       animation: _floatAnim,
       builder: (_, child) => Transform.translate(
@@ -423,25 +449,51 @@ class _CodeWindowsMockupState extends State<_CodeWindowsMockup>
       ),
       child: Center(
         child: SizedBox(
-          width: 340,
-          height: 420,
+          width: 380,
+          height: 500,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              // Back window — slightly offset, faded
+              // Furthest back — skills.dart
               Positioned(
-                top: 50,
-                left: 38,
+                top: 80,
+                left: 68,
                 child: Opacity(
-                  opacity: 0.5,
+                  opacity: 0.28,
                   child: _buildWindow(
-                    filename: 'theme.dart',
-                    lines: themeLines,
-                    width: 268,
+                    filename: 'skills.dart',
+                    lines: skillsLines,
+                    width: 240,
                   ),
                 ),
               ),
-              // Front window
+              // Third — theme.dart
+              Positioned(
+                top: 54,
+                left: 46,
+                child: Opacity(
+                  opacity: 0.45,
+                  child: _buildWindow(
+                    filename: 'theme.dart',
+                    lines: themeLines,
+                    width: 260,
+                  ),
+                ),
+              ),
+              // Second — profile.dart
+              Positioned(
+                top: 28,
+                left: 22,
+                child: Opacity(
+                  opacity: 0.72,
+                  child: _buildWindow(
+                    filename: 'profile.dart',
+                    lines: profileLines,
+                    width: 280,
+                  ),
+                ),
+              ),
+              // Front — main.dart
               Positioned(
                 top: 0,
                 left: 0,

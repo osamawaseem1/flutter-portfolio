@@ -29,12 +29,12 @@ const _experiences = [
   _ExperienceData(
     role: 'Flutter Developer',
     company: 'Halal Kiwi',
-    period: 'Aug 2024 – Present',
+    period: 'Jan 2023 – Present',
     type: 'Full-time',
     bullets: [
       'Redesigned the app\'s UI end to end — identified the need, planned the design, and delivered it without being directed',
-      'Built a significantly improved search experience that made finding listings faster and more intuitive',
-      'Reduced Firestore database read costs by reworking how data was structured and fetched, improving load times',
+      'Added fuzzy search which improved search experience that made finding listings faster and more intuitive',
+      'Reduced Firestore database read costs by reworking how data was structured and fetched, improving app load times',
     ],
     icon: Icons.restaurant,
     color: AppColors.green,
@@ -42,12 +42,12 @@ const _experiences = [
   _ExperienceData(
     role: 'Mobile Lead',
     company: 'Masajidna (Personal Project)',
-    period: 'Oct 2022 – Jul 2024',
+    period: 'Nov 2025 – Feb 2026',
     type: 'Personal Project',
     bullets: [
       'Built a "Catch Prayer" feature that finds mosques a user can reach before prayer starts using Google Distance Matrix API',
-      'Redesigned Firestore data model to embed prayer times inside mosque document — 50% read reduction',
-      'Added offline-first Firestore persistence, reducing repeat reads by 70–90% for returning users',
+      'Designed the Firestore data model from scratch — embedded prayer times in the mosque document to minimise read costs',
+      'Added offline-first architecture using Firestore persistence to reduce repeat reads for returning users',
       'Secured the platform with Firebase App Check, rate limiting, and query size restrictions',
     ],
     icon: Icons.mosque,
@@ -143,9 +143,9 @@ class ExperienceSection extends StatelessWidget {
                 children: [
                   Expanded(
                     child: _EducationCard(
-                      degree: 'Bachelor of Computer Science',
+                      degree: 'Bachelor of Computer and Information Sciences',
                       school: 'Auckland University of Technology (AUT)',
-                      period: '2025 – 2028 (in progress)',
+                      period: 'Jul 2024 – Present',
                       icon: Icons.school_outlined,
                       color: AppColors.accent,
                     ),

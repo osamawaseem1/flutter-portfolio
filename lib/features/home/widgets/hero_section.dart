@@ -133,7 +133,7 @@ class _HeroSectionState extends State<HeroSection>
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       children: [
-        Expanded(flex: 6, child: _buildTextContent()),
+        Expanded(flex: 6, child: Center(child: _buildTextContent())),
         const SizedBox(width: 48),
         Expanded(flex: 4, child: _buildDeviceMockup()),
       ],
@@ -157,6 +157,7 @@ class _HeroSectionState extends State<HeroSection>
   Widget _buildTextContent() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisSize: MainAxisSize.min,
       children: [
         Container(
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 5),
@@ -290,7 +291,7 @@ class _HeroSectionState extends State<HeroSection>
   }
 
   Widget _buildDeviceMockup() {
-    return _DeviceMockup()
+    return _CodeWindowsMockup()
         .animate()
         .fadeIn(delay: 600.ms, duration: 800.ms)
         .slideX(begin: 0.2, end: 0);
@@ -328,12 +329,12 @@ class _GridPainter extends CustomPainter {
   bool shouldRepaint(covariant CustomPainter oldDelegate) => false;
 }
 
-class _DeviceMockup extends StatefulWidget {
+class _CodeWindowsMockup extends StatefulWidget {
   @override
-  State<_DeviceMockup> createState() => _DeviceMockupState();
+  State<_CodeWindowsMockup> createState() => _CodeWindowsMockupState();
 }
 
-class _DeviceMockupState extends State<_DeviceMockup>
+class _CodeWindowsMockupState extends State<_CodeWindowsMockup>
     with SingleTickerProviderStateMixin {
   late AnimationController _floatController;
   late Animation<double> _floatAnim;
@@ -343,9 +344,9 @@ class _DeviceMockupState extends State<_DeviceMockup>
     super.initState();
     _floatController = AnimationController(
       vsync: this,
-      duration: const Duration(seconds: 3),
+      duration: const Duration(seconds: 4),
     )..repeat(reverse: true);
-    _floatAnim = Tween<double>(begin: -8, end: 8).animate(
+    _floatAnim = Tween<double>(begin: -10, end: 10).animate(
       CurvedAnimation(parent: _floatController, curve: Curves.easeInOut),
     );
   }
@@ -356,8 +357,64 @@ class _DeviceMockupState extends State<_DeviceMockup>
     super.dispose();
   }
 
+  // Syntax highlight colours
+  static const _kw  = Color(0xFFC792EA); // keywords
+  static const _str = Color(0xFFC3E88D); // strings
+  static const _cls = Color(0xFF82AAFF); // types / class names
+  static const _num = Color(0xFFF78C6C); // numbers / hex
+  static const _cmt = Color(0xFF546E7A); // comments
+  static const _def = Color(0xFFCDD3DE); // default text
+  static const _dec = Color(0xFF89DDFF); // decorators
+
+  TextSpan _ts(String t, Color c) =>
+      TextSpan(text: t, style: TextStyle(color: c));
+
+  Widget _cl(List<TextSpan> spans) => Padding(
+        padding: const EdgeInsets.only(bottom: 2),
+        child: RichText(
+          text: TextSpan(
+            style: const TextStyle(
+              fontFamily: 'JetBrainsMono',
+              fontSize: 10,
+              height: 1.6,
+            ),
+            children: spans,
+          ),
+        ),
+      );
+
+  Widget _blank() => const SizedBox(height: 4);
+
   @override
   Widget build(BuildContext context) {
+    final mainLines = [
+      _cl([_ts('import ', _kw), _ts("'package:flutter/material.dart'", _str), _ts(';', _def)]),
+      _blank(),
+      _cl([_ts('void ', _kw), _ts('main', _cls), _ts('() => ', _def), _ts('runApp', _cls), _ts('(', _def), _ts('const ', _kw), _ts('App', _cls), _ts('());', _def)]),
+      _blank(),
+      _cl([_ts('class ', _kw), _ts('App ', _cls), _ts('extends ', _kw), _ts('StatelessWidget ', _cls), _ts('{', _def)]),
+      _cl([_ts('  ', _def), _ts('@override', _dec)]),
+      _cl([_ts('  ', _def), _ts('Widget ', _cls), _ts('build', _cls), _ts('(', _def), _ts('BuildContext ', _cls), _ts('ctx) {', _def)]),
+      _cl([_ts('    return ', _kw), _ts('MaterialApp', _cls), _ts('(', _def)]),
+      _cl([_ts('      theme: ', _def), _ts('AppTheme', _cls), _ts('.dark,', _def)]),
+      _cl([_ts('      home: ', _def), _ts('const ', _kw), _ts('HomePage', _cls), _ts('(),', _def)]),
+      _cl([_ts('    );', _def)]),
+      _cl([_ts('  }', _def)]),
+      _cl([_ts('}', _def)]),
+    ];
+
+    final themeLines = [
+      _cl([_ts('// App colour theme', _cmt)]),
+      _blank(),
+      _cl([_ts('class ', _kw), _ts('AppTheme ', _cls), _ts('{', _def)]),
+      _cl([_ts('  static ', _kw), _ts('ThemeData ', _cls), _ts('get dark ', _def), _ts('=>', _def)]),
+      _cl([_ts('    ', _def), _ts('ThemeData', _cls), _ts('(', _def)]),
+      _cl([_ts('      brightness: ', _def), _ts('Brightness', _cls), _ts('.dark,', _def)]),
+      _cl([_ts('      primaryColor: ', _def), _ts('Color', _cls), _ts('(', _def), _ts('0xFF7B74CC', _num), _ts('),', _def)]),
+      _cl([_ts('    );', _def)]),
+      _cl([_ts('}', _def)]),
+    ];
+
     return AnimatedBuilder(
       animation: _floatAnim,
       builder: (_, child) => Transform.translate(
@@ -365,178 +422,120 @@ class _DeviceMockupState extends State<_DeviceMockup>
         child: child,
       ),
       child: Center(
-        child: Container(
-          width: 260,
-          height: 480,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(36),
-            gradient: LinearGradient(
-              begin: Alignment.topLeft,
-              end: Alignment.bottomRight,
-              colors: [
-                AppColors.card,
-                AppColors.surface,
-              ],
-            ),
-            border: Border.all(
-              color: AppColors.accent.withOpacity(0.3),
-              width: 1.5,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: AppColors.accent.withOpacity(0.15),
-                blurRadius: 60,
-                spreadRadius: 10,
+        child: SizedBox(
+          width: 340,
+          height: 420,
+          child: Stack(
+            clipBehavior: Clip.none,
+            children: [
+              // Back window — slightly offset, faded
+              Positioned(
+                top: 50,
+                left: 38,
+                child: Opacity(
+                  opacity: 0.5,
+                  child: _buildWindow(
+                    filename: 'theme.dart',
+                    lines: themeLines,
+                    width: 268,
+                  ),
+                ),
               ),
-              BoxShadow(
-                color: AppColors.accentCyan.withOpacity(0.08),
-                blurRadius: 80,
-                spreadRadius: 5,
+              // Front window
+              Positioned(
+                top: 0,
+                left: 0,
+                child: _buildWindow(
+                  filename: 'main.dart',
+                  lines: mainLines,
+                  width: 298,
+                ),
               ),
             ],
           ),
-          child: ClipRRect(
-            borderRadius: BorderRadius.circular(34),
-            child: _buildAppPreview(),
-          ),
         ),
       ),
     );
   }
 
-  Widget _buildAppPreview() {
+  Widget _buildWindow({
+    required String filename,
+    required List<Widget> lines,
+    required double width,
+  }) {
     return Container(
-      decoration: const BoxDecoration(
-        gradient: LinearGradient(
-          begin: Alignment.topCenter,
-          end: Alignment.bottomCenter,
-          colors: [Color(0xFF0D1A2E), Color(0xFF0A0F1E)],
-        ),
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(20),
-        child: Column(
-          children: [
-            const SizedBox(height: 12),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text('9:41', style: AppTextStyles.bodySmall.copyWith(fontSize: 12)),
-                Row(
-                  children: const [
-                    Icon(Icons.signal_cellular_alt, size: 14, color: AppColors.textSecondary),
-                    SizedBox(width: 4),
-                    Icon(Icons.wifi, size: 14, color: AppColors.textSecondary),
-                    SizedBox(width: 4),
-                    Icon(Icons.battery_full, size: 14, color: AppColors.textSecondary),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Row(
-              children: [
-                Container(
-                  width: 36,
-                  height: 36,
-                  decoration: BoxDecoration(
-                    color: AppColors.accent.withOpacity(0.2),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(color: AppColors.accent.withOpacity(0.4)),
-                  ),
-                  child: const Icon(Icons.mosque, size: 18, color: AppColors.accent),
-                ),
-                const SizedBox(width: 10),
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text('Masajidna', style: AppTextStyles.headingSmall.copyWith(fontSize: 14)),
-                    Text('Mosque Finder', style: AppTextStyles.bodySmall.copyWith(fontSize: 10)),
-                  ],
-                ),
-              ],
-            ),
-            const SizedBox(height: 20),
-            Container(
-              height: 36,
-              decoration: BoxDecoration(
-                color: AppColors.glassBackground,
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(color: AppColors.glassBorder),
-              ),
-              child: Row(
-                children: [
-                  const SizedBox(width: 10),
-                  const Icon(Icons.search, size: 14, color: AppColors.textSecondary),
-                  const SizedBox(width: 8),
-                  Text('Find nearby mosques...', style: AppTextStyles.bodySmall.copyWith(fontSize: 11)),
-                ],
-              ),
-            ),
-            const SizedBox(height: 16),
-            _miniCard('Masjid Al-Noor', '2 min drive', Icons.location_on),
-            const SizedBox(height: 8),
-            _miniCard('Auckland Mosque', '5 min drive', Icons.location_on),
-            const SizedBox(height: 8),
-            _miniCard('Green Lane Masjid', '8 min drive', Icons.location_on),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _statMini('Fajr', '5:42 AM'),
-                _statMini('Dhuhr', '1:15 PM'),
-                _statMini('Asr', '4:30 PM'),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _miniCard(String name, String distance, IconData icon) {
-    return Container(
-      padding: const EdgeInsets.all(10),
+      width: width,
       decoration: BoxDecoration(
-        color: AppColors.glassBackground,
-        borderRadius: BorderRadius.circular(10),
+        color: const Color(0xFF080912),
+        borderRadius: BorderRadius.circular(12),
         border: Border.all(color: AppColors.glassBorder),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 28,
-            height: 28,
-            decoration: BoxDecoration(
-              color: AppColors.accent.withOpacity(0.15),
-              borderRadius: BorderRadius.circular(8),
-            ),
-            child: Icon(icon, size: 14, color: AppColors.accent),
+        boxShadow: [
+          BoxShadow(
+            color: AppColors.accent.withOpacity(0.12),
+            blurRadius: 40,
+            spreadRadius: 2,
           ),
-          const SizedBox(width: 8),
-          Expanded(
+        ],
+      ),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          // Chrome bar
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+            decoration: BoxDecoration(
+              color: const Color(0xFF0C0D1A),
+              borderRadius: const BorderRadius.only(
+                topLeft: Radius.circular(12),
+                topRight: Radius.circular(12),
+              ),
+              border: Border(bottom: BorderSide(color: AppColors.glassBorder)),
+            ),
+            child: Row(
+              children: [
+                _WinDot(color: const Color(0xFFFF5F57)),
+                const SizedBox(width: 5),
+                _WinDot(color: const Color(0xFFFFBD2E)),
+                const SizedBox(width: 5),
+                _WinDot(color: const Color(0xFF28CA41)),
+                const SizedBox(width: 12),
+                Text(
+                  filename,
+                  style: const TextStyle(
+                    fontFamily: 'JetBrainsMono',
+                    fontSize: 10,
+                    color: Color(0xFF546E7A),
+                  ),
+                ),
+              ],
+            ),
+          ),
+          // Code content
+          Padding(
+            padding: const EdgeInsets.all(14),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(name, style: AppTextStyles.bodySmall.copyWith(fontSize: 11, color: AppColors.textPrimary)),
-                Text(distance, style: AppTextStyles.bodySmall.copyWith(fontSize: 10)),
-              ],
+              mainAxisSize: MainAxisSize.min,
+              children: lines,
             ),
           ),
-          const Icon(Icons.arrow_forward_ios, size: 10, color: AppColors.textSecondary),
         ],
       ),
     );
   }
+}
 
-  Widget _statMini(String label, String value) {
-    return Column(
-      children: [
-        Text(value, style: AppTextStyles.bodySmall.copyWith(fontSize: 11, color: AppColors.accentCyan, fontWeight: FontWeight.w600)),
-        Text(label, style: AppTextStyles.bodySmall.copyWith(fontSize: 10)),
-      ],
-    );
-  }
+class _WinDot extends StatelessWidget {
+  final Color color;
+  const _WinDot({required this.color});
+
+  @override
+  Widget build(BuildContext context) => Container(
+        width: 8,
+        height: 8,
+        decoration: BoxDecoration(color: color, shape: BoxShape.circle),
+      );
 }
 
 class _PrimaryButton extends StatefulWidget {

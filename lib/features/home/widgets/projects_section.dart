@@ -1,5 +1,5 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:url_launcher/url_launcher.dart';
 import '../../../core/constants/app_colors.dart';
 import '../../../core/constants/app_text_styles.dart';
@@ -37,7 +37,7 @@ const _projects = [
   _ProjectData(
     name: 'Masajidna',
     description:
-        'A full-stack mosque management platform — three Flutter apps in one ecosystem. Admin, community, and display screen apps connected to Firebase with offline-first architecture.',
+        'A full-stack mosque management platform across three Flutter apps — admin panel, community app, and mosque display screen. Firebase backend with offline-first persistence and a proximity-based prayer finder using Google Distance Matrix API.',
     statusBadge: 'COMPLETED',
     starLabel: '★ Featured',
     tags: ['Flutter', 'Firebase', 'Riverpod', 'Go Router', 'Cloud Functions'],
@@ -235,7 +235,7 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
         children: [
           Expanded(flex: 55, child: _buildLeft(p)),
           const SizedBox(width: 32),
-          Expanded(flex: 45, child: _ChartPanel(accentColor: p.accentColor)),
+          Expanded(flex: 45, child: _UIMockupPanel(accentColor: p.accentColor)),
         ],
       ),
     );
@@ -247,7 +247,7 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
       children: [
         _buildLeft(p),
         const SizedBox(height: 24),
-        SizedBox(height: 180, child: _ChartPanel(accentColor: p.accentColor)),
+        SizedBox(height: 180, child: _UIMockupPanel(accentColor: p.accentColor)),
       ],
     );
   }
@@ -310,9 +310,9 @@ class _FeaturedProjectCardState extends State<_FeaturedProjectCard> {
   }
 }
 
-class _ChartPanel extends StatelessWidget {
+class _UIMockupPanel extends StatelessWidget {
   final Color accentColor;
-  const _ChartPanel({required this.accentColor});
+  const _UIMockupPanel({required this.accentColor});
 
   @override
   Widget build(BuildContext context) {
@@ -322,36 +322,47 @@ class _ChartPanel extends StatelessWidget {
         borderRadius: BorderRadius.circular(14),
         border: Border.all(color: AppColors.glassBorder),
       ),
-      padding: const EdgeInsets.all(20),
+      padding: const EdgeInsets.all(16),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
+          // Window chrome dots
           Row(
-            children: [
-              _MiniStat(label: 'Users', value: '15K+', color: accentColor),
-              const SizedBox(width: 20),
-              _MiniStat(label: 'Cost Saved', value: '50%', color: const Color(0xFF48BB78)),
-              const SizedBox(width: 20),
-              _MiniStat(label: 'Apps', value: '3', color: Colors.amber),
+            children: const [
+              _WinDot(color: Color(0xFFFF5F57)),
+              SizedBox(width: 6),
+              _WinDot(color: Color(0xFFFFBD2E)),
+              SizedBox(width: 6),
+              _WinDot(color: Color(0xFF28CA41)),
             ],
           ),
-          const SizedBox(height: 16),
-          Expanded(
-            child: CustomPaint(
-              painter: _LinechartPainter(accentColor: accentColor),
-              size: Size.infinite,
-            ),
+          const SizedBox(height: 14),
+          // Navbar skeleton
+          _SkeletonBar(widthFactor: 1.0, height: 8, delay: 0, accentColor: accentColor),
+          const SizedBox(height: 12),
+          // Two cards
+          Row(
+            children: [
+              Expanded(child: _SkeletonCard(delay: 200, accentColor: accentColor)),
+              const SizedBox(width: 8),
+              Expanded(child: _SkeletonCard(delay: 400, accentColor: accentColor)),
+            ],
           ),
           const SizedBox(height: 12),
+          // Text lines
+          _SkeletonBar(widthFactor: 0.85, height: 6, delay: 600, accentColor: accentColor),
+          const SizedBox(height: 7),
+          _SkeletonBar(widthFactor: 0.65, height: 6, delay: 800, accentColor: accentColor),
+          const SizedBox(height: 7),
+          _SkeletonBar(widthFactor: 0.45, height: 6, delay: 1000, accentColor: accentColor),
+          const Spacer(),
+          // Buttons
           Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: ['Jan', 'Mar', 'May', 'Jul', 'Sep', 'Nov']
-                .map((m) => Text(
-                      m,
-                      style: AppTextStyles.labelMedium.copyWith(
-                          fontSize: 10, color: AppColors.textMuted),
-                    ))
-                .toList(),
+            children: [
+              _SkeletonBtn(delay: 1200, accentColor: accentColor),
+              const SizedBox(width: 8),
+              _SkeletonBtn(delay: 1400, accentColor: accentColor),
+            ],
           ),
         ],
       ),
@@ -359,107 +370,111 @@ class _ChartPanel extends StatelessWidget {
   }
 }
 
-class _MiniStat extends StatelessWidget {
-  final String label;
-  final String value;
+class _WinDot extends StatelessWidget {
   final Color color;
-  const _MiniStat({required this.label, required this.value, required this.color});
+  const _WinDot({required this.color});
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        Text(value,
-            style: AppTextStyles.headingSmall
-                .copyWith(fontSize: 16, color: color, fontWeight: FontWeight.w700)),
-        Text(label,
-            style: AppTextStyles.labelMedium
-                .copyWith(fontSize: 10, color: AppColors.textMuted)),
-      ],
+    return Container(
+      width: 8,
+      height: 8,
+      decoration: BoxDecoration(color: color, shape: BoxShape.circle),
     );
   }
 }
 
-class _LinechartPainter extends CustomPainter {
+class _SkeletonBar extends StatelessWidget {
+  final double widthFactor;
+  final double height;
+  final int delay;
   final Color accentColor;
-  const _LinechartPainter({required this.accentColor});
+  const _SkeletonBar({
+    required this.widthFactor,
+    required this.height,
+    required this.delay,
+    required this.accentColor,
+  });
 
   @override
-  void paint(Canvas canvas, Size size) {
-    // Values go high→low because y=0 is the top; this produces an upward line left→right.
-    final points = [0.95, 0.88, 0.80, 0.72, 0.62, 0.52, 0.44, 0.36, 0.28, 0.20, 0.12, 0.05];
-    final w = size.width;
-    final h = size.height;
-
-    final gridPaint = Paint()
-      ..color = Colors.white.withOpacity(0.04)
-      ..strokeWidth = 1;
-    for (int i = 1; i <= 4; i++) {
-      final y = h * i / 4;
-      canvas.drawLine(Offset(0, y), Offset(w, y), gridPaint);
-    }
-
-    final linePaint = Paint()
-      ..color = accentColor
-      ..strokeWidth = 2.0
-      ..style = PaintingStyle.stroke
-      ..strokeCap = StrokeCap.round
-      ..strokeJoin = StrokeJoin.round;
-
-    final fillPaint = Paint()
-      ..shader = LinearGradient(
-        begin: Alignment.topCenter,
-        end: Alignment.bottomCenter,
-        colors: [
-          accentColor.withOpacity(0.25),
-          accentColor.withOpacity(0.0),
-        ],
-      ).createShader(Rect.fromLTWH(0, 0, w, h))
-      ..style = PaintingStyle.fill;
-
-    final n = points.length;
-    final path = Path();
-    final fillPath = Path();
-
-    Offset? prev;
-    for (int i = 0; i < n; i++) {
-      final x = w * i / (n - 1);
-      final y = h * points[i];
-      final current = Offset(x, y);
-
-      if (i == 0) {
-        path.moveTo(x, y);
-        fillPath.moveTo(x, y);
-      } else {
-        final cpX = (prev!.dx + x) / 2;
-        path.cubicTo(cpX, prev.dy, cpX, y, x, y);
-        fillPath.cubicTo(cpX, prev.dy, cpX, y, x, y);
-      }
-      prev = current;
-    }
-
-    fillPath.lineTo(w, h);
-    fillPath.lineTo(0, h);
-    fillPath.close();
-
-    canvas.drawPath(fillPath, fillPaint);
-    canvas.drawPath(path, linePaint);
-
-    canvas.drawCircle(
-      Offset(w, h * points.last),
-      4,
-      Paint()..color = accentColor,
-    );
-    canvas.drawCircle(
-      Offset(w, h * points.last),
-      2,
-      Paint()..color = Colors.white,
+  Widget build(BuildContext context) {
+    return LayoutBuilder(
+      builder: (context, constraints) {
+        return Container(
+          width: constraints.maxWidth * widthFactor,
+          height: height,
+          decoration: BoxDecoration(
+            color: const Color(0xFF0E0F20),
+            borderRadius: BorderRadius.circular(4),
+          ),
+        )
+            .animate(onPlay: (c) => c.repeat(), delay: Duration(milliseconds: delay))
+            .shimmer(duration: 1800.ms, color: accentColor.withOpacity(0.12));
+      },
     );
   }
+}
+
+class _SkeletonCard extends StatelessWidget {
+  final int delay;
+  final Color accentColor;
+  const _SkeletonCard({required this.delay, required this.accentColor});
 
   @override
-  bool shouldRepaint(_LinechartPainter old) => old.accentColor != accentColor;
+  Widget build(BuildContext context) {
+    return Container(
+      height: 52,
+      padding: const EdgeInsets.all(10),
+      decoration: BoxDecoration(
+        color: const Color(0xFF0E0F20),
+        borderRadius: BorderRadius.circular(8),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Container(
+            height: 6,
+            decoration: BoxDecoration(
+              color: const Color(0xFF161728),
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+          const SizedBox(height: 6),
+          Container(
+            height: 6,
+            width: 40,
+            decoration: BoxDecoration(
+              color: const Color(0xFF161728),
+              borderRadius: BorderRadius.circular(3),
+            ),
+          ),
+        ],
+      ),
+    )
+        .animate(onPlay: (c) => c.repeat(), delay: Duration(milliseconds: delay))
+        .shimmer(duration: 1800.ms, color: accentColor.withOpacity(0.12));
+  }
+}
+
+class _SkeletonBtn extends StatelessWidget {
+  final int delay;
+  final Color accentColor;
+  const _SkeletonBtn({required this.delay, required this.accentColor});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 72,
+      height: 28,
+      decoration: BoxDecoration(
+        color: const Color(0xFF0E0F20),
+        borderRadius: BorderRadius.circular(6),
+      ),
+    )
+        .animate(onPlay: (c) => c.repeat(), delay: Duration(milliseconds: delay))
+        .shimmer(duration: 1800.ms, color: accentColor.withOpacity(0.12));
+  }
 }
 
 class _ProjectCard extends StatefulWidget {

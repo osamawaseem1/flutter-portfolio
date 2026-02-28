@@ -17,13 +17,13 @@ class AppConstants {
   static const String aboutBio =
       'Flutter developer based in Auckland, New Zealand. I build production-grade mobile apps with clean architecture, smart state management, and a genuine obsession with UI quality. '
       'I go beyond simple screens — working with proximity logic, Firestore cost optimisation, and complex state flows. '
-      'Currently contributing to Halal Kiwi, New Zealand\'s leading Muslim directory app. Previously led mobile development on Masajidna — a full-stack mosque management platform serving 15K+ users across three Flutter apps.';
+      'Currently contributing to Halal Kiwi, New Zealand\'s leading Muslim directory app. Previously built Masajidna — a full-stack mosque management platform across three Flutter apps.';
 
   // Stats
   static const List<Map<String, String>> stats = [
     {'value': '2+', 'label': 'Apps Shipped'},
     {'value': '4.8', 'label': 'Avg Store Rating'},
-    {'value': '15K+', 'label': 'Users Reached'},
+    {'value': '3', 'label': 'Apps Built'},
     {'value': '4+', 'label': 'Years Experience'},
   ];
 

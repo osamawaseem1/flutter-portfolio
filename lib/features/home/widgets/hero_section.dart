@@ -449,58 +449,58 @@ class _CodeWindowsMockupState extends State<_CodeWindowsMockup>
       ),
       child: Center(
         child: SizedBox(
-          width: 380,
-          height: 500,
+          width: 420,
+          height: 460,
           child: Stack(
             clipBehavior: Clip.none,
             children: [
-              // Furthest back — skills.dart
+              // Bottom-right — skills.dart (back)
               Positioned(
-                top: 80,
-                left: 68,
+                top: 248,
+                left: 210,
                 child: Opacity(
-                  opacity: 0.28,
+                  opacity: 0.55,
                   child: _buildWindow(
                     filename: 'skills.dart',
                     lines: skillsLines,
-                    width: 240,
+                    width: 185,
                   ),
                 ),
               ),
-              // Third — theme.dart
+              // Bottom-left — theme.dart
               Positioned(
-                top: 54,
-                left: 46,
+                top: 235,
+                left: 8,
                 child: Opacity(
-                  opacity: 0.45,
+                  opacity: 0.70,
                   child: _buildWindow(
                     filename: 'theme.dart',
                     lines: themeLines,
-                    width: 260,
+                    width: 220,
                   ),
                 ),
               ),
-              // Second — profile.dart
+              // Top-right — profile.dart
               Positioned(
-                top: 28,
-                left: 22,
+                top: 14,
+                left: 200,
                 child: Opacity(
-                  opacity: 0.72,
+                  opacity: 0.88,
                   child: _buildWindow(
                     filename: 'profile.dart',
                     lines: profileLines,
-                    width: 280,
+                    width: 212,
                   ),
                 ),
               ),
-              // Front — main.dart
+              // Top-left — main.dart (front)
               Positioned(
                 top: 0,
                 left: 0,
                 child: _buildWindow(
                   filename: 'main.dart',
                   lines: mainLines,
-                  width: 298,
+                  width: 262,
                 ),
               ),
             ],
